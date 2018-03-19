@@ -6,20 +6,22 @@ public class PlayerController : MonoBehaviour {
 
     private Transform tf;
     private GameObject cam;
+    private Rigidbody playerRb;
+    private Vector3 InitialPos;
 
     public float speedMovement;
     public float speedMouseX;
     public float speedMouseY;
-
-	// Use this for initialization
+	
 	void Start ()
     {
         tf = GetComponent<Transform>();
         cam = tf.Find("Main Camera").gameObject;
+        playerRb = GetComponent<Rigidbody>();
+        InitialPos = tf.position;
 	}
-	
-	// Update is called once per frame
-	void Update ()
+
+	void FixedUpdate ()
     {
         float moveH = Input.GetAxis("Horizontal");
         float moveV = Input.GetAxis("Vertical");
@@ -35,5 +37,11 @@ public class PlayerController : MonoBehaviour {
         tf.Rotate(rotation * Time.deltaTime * speedMouseX);
 
         cam.transform.Rotate(new Vector3(- mouseY, 0.0f, 0.0f) * speedMouseY);
+
+        if(Input.GetKeyDown("space"))
+        {
+            if (tf.position.y <= InitialPos.y + 0.3) 
+             playerRb.AddForce(new Vector3(0.0f, 500.0f, 0.0f), ForceMode.Impulse);
+        }
     }
 }
